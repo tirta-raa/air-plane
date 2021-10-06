@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "89871844038",
+    "project_id": "airplane-4aed9",
+    "storage_bucket": "airplane-4aed9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89871844038:android:06c552f054ec53eda54dc7",
+        "android_client_info": {
+          "package_name": "com.example.airplane"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89871844038-4017magnu05jl5p9k7mnvpnirqlui5h9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZl00fyvQUc3jPwsRKSJO4exJYy_4EYhE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89871844038-4017magnu05jl5p9k7mnvpnirqlui5h9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "89871844038-ojoj9g0a9dk6qntrafgvf4a0puikthr0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tirta.airplane"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
