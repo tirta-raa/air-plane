@@ -1,7 +1,9 @@
 part of 'pages.dart';
 
 class CheckoutPage extends StatelessWidget {
-  const CheckoutPage({Key? key}) : super(key: key);
+  final TransactionModels transaction;
+
+  const CheckoutPage(this.transaction, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,9 @@ class CheckoutPage extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
             image: DecorationImage(
-                fit: BoxFit.cover, image: NetworkImage(testImageUrl)),
+              fit: BoxFit.cover,
+              image: NetworkImage(transaction.destination.imageUrl),
+            ),
           ),
         );
       }
@@ -61,10 +65,13 @@ class CheckoutPage extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Lake Ciliwung',
+            Text(transaction.destination.name,
                 style: blackFontStyle2.copyWith(fontSize: 18)),
             SizedBox(height: 5),
-            Text('Tanggerang', style: greyFontStyle),
+            Text(
+              transaction.destination.city,
+              style: greyFontStyle,
+            ),
           ],
         );
       }
@@ -84,7 +91,8 @@ class CheckoutPage extends StatelessWidget {
                 ),
               ),
             ),
-            Text('4.0', style: blackFontStyle2),
+            Text(transaction.destination.rating.toString(),
+                style: blackFontStyle2),
           ],
         );
       }
@@ -116,7 +124,7 @@ class CheckoutPage extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '2 Person',
+                '${transaction.amountOfTraveler} Person',
                 style: blackFontStyle1,
               ),
             ],
@@ -141,7 +149,7 @@ class CheckoutPage extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'A3, B3',
+                transaction.selctedSeats,
                 style: blackFontStyle1,
               ),
             ],
@@ -166,8 +174,10 @@ class CheckoutPage extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'YES',
-                style: blackFontStyle1.copyWith(color: greenColor),
+                transaction.insurance ? 'YES' : 'NO',
+                style: blackFontStyle1.copyWith(
+                  color: transaction.insurance ? greenColor : redColor,
+                ),
               ),
             ],
           ),
@@ -191,8 +201,10 @@ class CheckoutPage extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'No',
-                style: blackFontStyle1.copyWith(color: redColor),
+                transaction.refundable ? 'YES' : 'NO',
+                style: blackFontStyle1.copyWith(
+                  color: transaction.refundable ? greenColor : redColor,
+                ),
               ),
             ],
           ),
@@ -216,7 +228,7 @@ class CheckoutPage extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '45%',
+                '${(transaction.vat * 100).toStringAsFixed(0)}%',
                 style: blackFontStyle1,
               ),
             ],
@@ -241,7 +253,9 @@ class CheckoutPage extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'IDR 8.500.690',
+                NumberFormat.currency(locale: 'id', symbol: 'IDR ').format(
+                  transaction.price,
+                ),
                 style: blackFontStyle1,
               ),
             ],
@@ -266,7 +280,9 @@ class CheckoutPage extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'IDR 12.000.000',
+                NumberFormat.currency(locale: 'id', symbol: 'IDR ').format(
+                  transaction.grandTotal,
+                ),
                 style: blackFontStyle1.copyWith(color: mainColor),
               ),
             ],
@@ -308,68 +324,104 @@ class CheckoutPage extends StatelessWidget {
 
     //*footer
     Widget paymentDetailCard() {
-      return Container(
-        margin: const EdgeInsets.only(top: 30),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          color: Colors.white,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //
-            //*payment detail
-            Text(
-              'Payment Details',
-              style: blackFontStyle1.copyWith(fontSize: 16),
-            ),
-
-            Row(
-              children: [
-                //
-                //* image Wallet
-                Container(
-                  margin: const EdgeInsets.only(right: 16, top: 16),
-                  width: 100,
-                  height: 70,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage('assets/wallet.png'),
-                    ),
+      return BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, state) {
+          if (state is AuthSuccess) {
+            return Container(
+              margin: const EdgeInsets.only(top: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                color: Colors.white,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //
+                  //*payment detail
+                  Text(
+                    'Payment Details',
+                    style: blackFontStyle1.copyWith(fontSize: 16),
                   ),
-                ),
 
-                //* balance
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
-                      Text(
-                        'IDR 80.400.000',
-                        style: blackFontStyle2.copyWith(fontSize: 18),
-                        overflow: TextOverflow.ellipsis,
+                      //
+                      //* image Wallet
+                      Container(
+                        margin: const EdgeInsets.only(right: 16, top: 16),
+                        width: 100,
+                        height: 70,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage('assets/wallet.png'),
+                          ),
+                        ),
                       ),
-                      Text('Current Balance', style: greyFontStyle),
+
+                      //* balance
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              NumberFormat.currency(
+                                locale: 'id',
+                                symbol: 'IDR ',
+                              ).format(
+                                state.user.balance,
+                              ),
+                              style: blackFontStyle2.copyWith(fontSize: 18),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text('Current Balance', style: greyFontStyle),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
+                ],
+              ),
+            );
+          }
+          return const SizedBox();
+        },
       );
     }
 
     Widget buttonPayNow() {
-      return CustomButton(
-        margin:
-            const EdgeInsets.symmetric(vertical: 44, horizontal: defaultMargin),
-        title: 'Pay Now',
-        onPressed: () {
-          Get.to(SuccessCheckout());
+      return BlocConsumer<TransactionCubit, TransactionState>(
+        listener: (context, state) {
+          if (state is TransactionSuccess) {
+            Get.offAll(SuccessCheckout());
+          } else if (state is TransactionFailed) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: redColor,
+                content: Text(state.error),
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is TransactionLoading) {
+            return Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 30),
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return CustomButton(
+            margin: const EdgeInsets.symmetric(
+                vertical: 44, horizontal: defaultMargin),
+            title: 'Pay Now',
+            onPressed: () {
+              context.read<TransactionCubit>().createTransaction(transaction);
+            },
+          );
         },
       );
     }

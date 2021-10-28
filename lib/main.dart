@@ -1,4 +1,3 @@
-import 'package:airplane/cubit/auth_cubit.dart';
 import 'package:airplane/cubit/cubit.dart';
 import 'package:airplane/ui/pages/pages.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,6 +24,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => DestinationCubit(),
+        ),
+        BlocProvider(
+          create: (context) => SeatCubit(),
+        ),
+        BlocProvider(
+          create: (context) => TransactionCubit(),
         ),
       ],
       child: GetMaterialApp(

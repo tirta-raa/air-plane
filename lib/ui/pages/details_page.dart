@@ -192,7 +192,7 @@ class DetailsPage extends StatelessWidget {
             title: 'Book Now',
             width: 170,
             onPressed: () {
-              Get.to(ChooseSeatPage());
+              Get.to(ChooseSeatPage(destination));
             },
           );
         }

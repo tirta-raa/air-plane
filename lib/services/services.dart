@@ -5,3 +5,4 @@ import 'package:firebase_auth/firebase_auth.dart';
 part 'auth_services.dart';
 part 'user_services.dart';
 part 'destination_services.dart';
+part 'transaction_services.dart';

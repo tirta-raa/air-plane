@@ -22,3 +22,4 @@ part 'choose_seat_page.dart';
 part 'checkout_page.dart';
 part 'settings_page.dart';
 part 'sign_in_page.dart';
+part 'transaction_page.dart';

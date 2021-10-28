@@ -30,7 +30,7 @@ class _MainPageState extends State<MainPage> {
                   child: HomePage(),
                 ),
                 Center(
-                  child: Text('2'),
+                  child: TransactionPage(),
                 ),
                 Center(
                   child: Text('3'),
